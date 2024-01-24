@@ -14,8 +14,9 @@ import java.time.Duration;
 
 public class SearchPage {
     WebDriver driver;
-    public SearchPage(WebDriver d){
-        this.driver=d;
+
+    public SearchPage(WebDriver d) {
+        this.driver = d;
         PageFactory.initElements(driver, this);
     }
 
@@ -25,26 +26,27 @@ public class SearchPage {
     @FindBy(xpath = "//input[@value='Go']")
     WebElement searchButton;
 
-   public void SearchElement(String items){
-       searchBox.click();
-       searchBox.sendKeys(items);
-       searchButton.click();
-   }
-   public void verifySearchedProduct(String searchItem){
-       String title = driver.getTitle();
-       Assert.assertTrue(title.contains(searchItem));
-       System.out.println("searched item is correct");
-   }
-   public void selectSearchItem() throws InterruptedException {
-       JavascriptExecutor js=  (JavascriptExecutor) driver;
-       WebDriverWait wait= new WebDriverWait(driver, Duration.ofSeconds(10));
-       WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//body/div[@id='a-page']/div[@id='search']/div[1]/div[1]/div[1]/span[1]/div[1]/div[8]/div[1]/div[1]/span[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/span[1]/a[1]/div[1]/img[1]")));
+    public void searchElement(String items) {
+        searchBox.click();
+        searchBox.sendKeys(items);
+        searchButton.click();
+    }
 
-       js.executeScript("arguments[0].scrollIntoView()", element);
-       Thread.sleep(2000);
-       element.click();
-       String title = driver.getTitle();
+    public void verifySearchedProduct(String searchItem) {
+        String title = driver.getTitle();
+        Assert.assertTrue(title.contains(searchItem));
+        System.out.println("searched item is correct");
+    }
 
-       System.out.println(title);
-   }
+    public void selectSearchItem() throws InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//body/div[@id='a-page']/div[@id='search']/div[1]/div[1]/div[1]/span[1]/div[1]/div[8]/div[1]/div[1]/span[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/span[1]/a[1]/div[1]/img[1]")));
+        js.executeScript("arguments[0].scrollIntoView()", element);
+        Thread.sleep(2000);
+        element.click();
+        String title = driver.getTitle();
+        System.out.println(title);
+    }
+
 }

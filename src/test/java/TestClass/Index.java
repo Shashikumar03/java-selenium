@@ -1,5 +1,6 @@
 package TestClass;
 
+import org.example.ConfigReader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -17,55 +18,71 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 public class Index {
-    String path= "/home/shashi/IdeaProjects/SeleniumLearning/src/test/resource/chromedriver";
     private WebDriver driver;
+    private ConfigReader configReader;
 
+    //setup;
     @BeforeClass
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", path);
+        configReader = new ConfigReader();
+        System.setProperty("webdriver.chrome.driver", configReader.getChromeDriverPath());
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
+
+    //getting website url from config.properties
     @Test(priority = 0)
-    public  void TestHomePage(){
-        driver.get("https://www.amazon.in/");
+    public void TestHomePage() {
+        driver.get(configReader.getWebsiteUrl());
     }
+
+    //validating Login page with valid username and Password;
     @Test(priority = 1)
-    public void testLogin() throws InterruptedException {
+    public void testLogin() {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.loginAmazon("9110164834","Shashi@123");
+        boolean logged = loginPage.loginAmazon(configReader.getUserName(), configReader.getPassWord());
+        if(logged){
+            System.out.println("user is successfully logged in");
+        }else{
+            System.out.println("user can not logged in");
+        }
+
     }
+
+    //validating search;
     @Test(priority = 2)
-    public  void searchItems() throws InterruptedException {
-        SearchPage searchPage= new SearchPage(driver);
-        String searchItem="poco f1";
-        searchPage.SearchElement(searchItem);
+    public void searchItems() throws InterruptedException {
+        SearchPage searchPage = new SearchPage(driver);
+        String searchItem = "poco f1";
+        searchPage.searchElement(searchItem);
         searchPage.verifySearchedProduct(searchItem);
         searchPage.selectSearchItem();
     }
+
     @Test(priority = 3)
-    public  void selectQuantityFromDropdown() throws Exception {
-        SelectedItemPage selectedItemPage= new SelectedItemPage(driver);
+    public void selectQuantityFromDropdown() throws Exception {
+        SelectedItemPage selectedItemPage = new SelectedItemPage(driver);
         selectedItemPage.buyTheItem();
     }
 
     @Test(priority = 4)
-    public  void validateCheckout() throws InterruptedException {
+    public void validateCheckout() throws InterruptedException {
         Thread.sleep(5000);
-        CheckoutPage checkoutPage= new CheckoutPage(driver);
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
         checkoutPage.checkTextPage();
 
     }
+
     @Test(priority = 5, dependsOnMethods = "testLogin")
-    public  void logOut(){
+    public void logOut() {
         LoginPage loginPage = new LoginPage(driver);
-        ArrayList<String> tabs= new ArrayList<>(driver.getWindowHandles());
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(0));
         loginPage.logout();
     }
+
     @AfterClass
     public void tearDown() throws InterruptedException {
-
         Thread.sleep(3000);
         driver.quit();
     }

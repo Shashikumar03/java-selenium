@@ -8,10 +8,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class CheckoutPage {
-     WebDriver driver;
-    public  CheckoutPage(WebDriver d){
-        this.driver=d;
-        PageFactory.initElements(driver,this);
+    WebDriver driver;
+
+    public CheckoutPage(WebDriver d) {
+        this.driver = d;
+        PageFactory.initElements(driver, this);
     }
 
     @FindBy(xpath = "//h1[contains(text(),\'Checkout\')]")
@@ -20,12 +21,13 @@ public class CheckoutPage {
     @FindBy(xpath = "//span[contains(text(),'Credit or debit card')]")
     WebElement cardElement;
 
-    public void checkTextPage(){
+    public void checkTextPage() {
 
         String chekcoutText = checkoutText.getText().toLowerCase();
         Assert.assertTrue(chekcoutText.equals("checkout"));
-        System.out.println("checkot page this is");
+        System.out.println("checkout page ");
     }
+
     public void checkCardOption() throws InterruptedException {
         String text = cardElement.getText().toLowerCase();
         Assert.assertTrue(text.contains("card"));

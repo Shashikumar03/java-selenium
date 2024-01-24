@@ -17,38 +17,35 @@ import java.util.ArrayList;
 public class SelectedItemPage {
     WebDriver driver;
 
-   @FindBy(xpath = "//input[@id='buy-now-button']")
+    @FindBy(xpath = "//input[@id='buy-now-button']")
     WebElement buyButton;
 
-   @FindBy(css = "#quantity")
-   WebElement dropdown;
+    @FindBy(css = "#quantity")
+    WebElement dropdown;
 
 
-   public  SelectedItemPage(WebDriver d){
-        this.driver=d;
-       PageFactory.initElements(driver,this);
-   }
+    public SelectedItemPage(WebDriver d) {
+        this.driver = d;
+        PageFactory.initElements(driver, this);
+    }
 
 
+    public void buyTheItem() throws Exception {
+        ArrayList<String> al = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(al.get(1));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        try {
+            if (dropdown.isDisplayed()) {
+                Select select = new Select(dropdown);
+                select.selectByValue("2");
 
-   public void buyTheItem() throws Exception {
-       ArrayList<String>al= new ArrayList<>(driver.getWindowHandles());
-      driver.switchTo().window(al.get(1));
-        WebDriverWait wait= new WebDriverWait(driver,Duration.ofSeconds(30));
-
-     try {
-         if(dropdown.isDisplayed()){
-             Select select = new Select(dropdown);
-             select.selectByValue("2");
-
-         }
-     }catch (Exception e){
-         System.out.println("quantity dropdown is not present");
-     }
-
-       wait.until(ExpectedConditions.visibilityOf(buyButton)).click();
+            }
+        } catch (Exception e) {
+            System.out.println("quantity dropdown is not present");
+        }
+        wait.until(ExpectedConditions.visibilityOf(buyButton)).click();
 
 
-   }
+    }
 
 }

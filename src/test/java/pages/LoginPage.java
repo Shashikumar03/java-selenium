@@ -14,44 +14,51 @@ import java.time.Duration;
 public class LoginPage {
 
     WebDriver driver;
-    public LoginPage(WebDriver d){
-        this.driver=d;
+
+    public LoginPage(WebDriver d) {
+        this.driver = d;
         PageFactory.initElements(driver, this);
     }
-    @FindBy(id="nav-link-accountList-nav-line-1")
-     WebElement signInIcon;
 
-    @FindBy(id="continue")
+    @FindBy(id = "nav-link-accountList-nav-line-1")
+    WebElement signInIcon;
+
+    @FindBy(id = "continue")
     WebElement continueButton;
 
-    @FindBy(id ="ap_email" )
+    @FindBy(id = "ap_email")
     private WebElement email;
 
     @FindBy(id = "ap_password")
-     private WebElement password;
+    private WebElement password;
 
     @FindBy(id = "signInSubmit")
-   private  WebElement loginButton;
+    private WebElement loginButton;
 
     @FindBy(xpath = "//span[contains(text(),'Sign Out')]")
-    private  WebElement signoutButton;
+    private WebElement signoutButton;
 
-    public void loginAmazon(String userName,String pwd) throws InterruptedException {
-
+    public boolean loginAmazon(String userName, String pwd) {
         // Wait until the search box is visible
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(signInIcon)).click();
-        email.sendKeys(userName);
-        continueButton.click();
-        password.sendKeys(pwd);
-//        Thread.sleep(3000);
-        loginButton.click();
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.elementToBeClickable(signInIcon)).click();
+            email.sendKeys(userName);
+            continueButton.click();
+            password.sendKeys(pwd);
+            loginButton.click();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
 
     }
-    public void logout(){
+
+    public void logout() {
         Actions actions = new Actions(driver);
         actions.moveToElement(signInIcon).build().perform();
-        WebDriverWait wait= new WebDriverWait(driver,Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.elementToBeClickable(signoutButton)).click();
 
 
