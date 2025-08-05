@@ -58,6 +58,7 @@ public class LoginPage {
     public void logout() {
         Actions actions = new Actions(driver);
         actions.moveToElement(signInIcon).build().perform();
+
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.elementToBeClickable(signoutButton)).click();
 
